@@ -21,7 +21,7 @@ The project implements the following features:
   
   **Getting Started**
   
-    1.Clone this repository to your local machine using git clone https://github.com/yourusername/android-mvvm-jetpack-compose-sample.git
+    1.Clone this repository to your local machine using git clone git@github.com:kashifansari786/androidSearchWithCompose.git
     2.Open the project in Android Studio
     3.Build and run the project on an emulator or a physical device running Android 5.0 or higher
     
