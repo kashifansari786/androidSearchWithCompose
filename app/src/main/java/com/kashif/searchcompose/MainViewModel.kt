@@ -2,6 +2,7 @@ package com.kashif.searchcompose
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 
 /**
@@ -16,16 +17,22 @@ class MainViewModel:ViewModel() {
     val isSearching =_isSearching.asStateFlow()
 
     private val _person= MutableStateFlow(allPerson)
-    val persons=searchText.combine(_person){
+    val persons=searchText
+        .debounce(1000L) // it delay to 500ms before other block is executed and if searchtext is changes before the delay is over then all other function is cancel
+        .onEach { _isSearching.update { true } }  //update searching
+        .combine(_person){
         text,person->
         if(text.isBlank()){
             person
         }else{
+            delay(2000L)
             person.filter {
                 it.doesMatchSearchQuery(text)
             }
         }
-    }.stateIn(
+    }
+        .onEach { _isSearching.update { false } }  //update search that search is over
+        .stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(5000),
         _person.value
